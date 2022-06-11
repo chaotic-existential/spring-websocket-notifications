@@ -77,7 +77,7 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public void delete(Long id) {
-        if (!repository.existsById(id)) {
+        if (repository.findById(id).isEmpty()) {
             throw new NoSuchRecordException(Notification.class, id);
         }
 
