@@ -1,5 +1,6 @@
 package ru.solnyshko.notifications.payload.request;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import ru.solnyshko.notifications.domain.entity.NotificationType;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
+@AllArgsConstructor
 public class NotificationUpdateRequest {
 
     @NotNull

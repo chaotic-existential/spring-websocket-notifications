@@ -1,12 +1,15 @@
 package ru.solnyshko.notifications.domain.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Data
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "notifications")
 public class Notification {
 
