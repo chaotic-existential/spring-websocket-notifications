@@ -17,6 +17,8 @@ import ru.solnyshko.notifications.payload.request.NotificationCreateRequest;
 import ru.solnyshko.notifications.payload.request.NotificationUpdateRequest;
 import ru.solnyshko.notifications.services.NotificationService;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -38,9 +40,17 @@ class NotificationControllerTests {
         testNotificationFactory = new TestNotificationFactory();
     }
 
-    void testGetAllRequest(ResultMatcher result) throws Exception {
+    void testGetAllRequest(ResultMatcher... results) throws Exception {
+
+        final List<NotificationDTO> dtoList = List.of(
+                testNotificationFactory.getNotificationDTO(0L),
+                testNotificationFactory.getNotificationDTO(1L),
+                testNotificationFactory.getNotificationDTO(2L));
+
+        when(mockService.getAll()).thenReturn(dtoList);
+
         RequestBuilder request = MockMvcRequestBuilders.get("/api/notifications");
-        mockMvc.perform(request).andExpect(result);
+        mockMvc.perform(request).andExpectAll(results);
     }
 
     void testCreateRequest(String jsonCreateRequest, ResultMatcher... results) throws Exception {
@@ -91,7 +101,14 @@ class NotificationControllerTests {
 
     @Test
     void testGetAll() throws Exception {
-        testGetAllRequest(status().isOk());
+        testGetAllRequest(status().isOk(),
+                jsonPath("$[0].id").value(0),
+                jsonPath("$[1].id").value(1),
+                jsonPath("$[2].id").value(2),
+                jsonPath("$[0].type").value("SUCCESS"),
+                jsonPath("$[0].title").value("Test title"),
+                jsonPath("$[0].content").value("Test content")
+        );
     }
 
     @Test
