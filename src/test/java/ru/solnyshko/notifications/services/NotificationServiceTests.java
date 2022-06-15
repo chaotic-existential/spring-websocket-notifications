@@ -1,7 +1,6 @@
 package ru.solnyshko.notifications.services;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +26,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class NotificationServiceTests {
@@ -85,7 +85,7 @@ public class NotificationServiceTests {
 
         assertEquals(dto, result);
 
-        verify(mockRepository, times(2)).findById(eq(id));
+        verify(mockRepository).findById(eq(id));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class NotificationServiceTests {
 
         assertEquals(dto, result);
 
-        verify(mockRepository, times(2)).findById(eq(id));
+        verify(mockRepository).findById(eq(id));
         verify(mockRepository).save(eq(entity));
     }
 
@@ -169,7 +169,7 @@ public class NotificationServiceTests {
 
         notificationServiceImpl.send(id);
 
-        verify(mockRepository, times(2)).findById(eq(id));
+        verify(mockRepository).findById(eq(id));
         verify(mockWebSocketService).sendNotification(dto);
 
         verify(entitySpy).setLastSentAt(any(LocalDateTime.class));

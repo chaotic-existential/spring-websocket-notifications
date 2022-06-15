@@ -49,12 +49,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public NotificationDTO getById(Long id) {
-        if (repository.findById(id).isEmpty()) {
-            throw new NoSuchRecordException(Notification.class, id);
-        }
+        Notification notification = repository.findById(id).orElseThrow(
+                () -> new NoSuchRecordException(Notification.class, id));
 
-        return mapper.toDto(
-                repository.findById(id).get());
+        return mapper.toDto(notification);
     }
 
     public NotificationDTO create(NotificationCreateRequest notificationCreateRequest) {
@@ -65,11 +63,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public NotificationDTO update(Long id, NotificationUpdateRequest notificationUpdateRequest) {
-        if (repository.findById(id).isEmpty()) {
-            throw new NoSuchRecordException(Notification.class, id);
-        }
+        Notification notification = repository.findById(id).orElseThrow(
+                () -> new NoSuchRecordException(Notification.class, id));
 
-        Notification notification = repository.findById(id).get();
         mapper.update(notificationUpdateRequest, notification);
 
         return mapper.toDto(
@@ -85,11 +81,9 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     public void send(Long id) {
-        if (repository.findById(id).isEmpty()) {
-            throw new NoSuchRecordException(Notification.class, id);
-        }
+        Notification notification = repository.findById(id).orElseThrow(
+                () -> new NoSuchRecordException(Notification.class, id));
 
-        Notification notification = repository.findById(id).get();
         NotificationDTO notificationDto = mapper.toDto(notification);
 
         webSocketService.sendNotification(notificationDto);
